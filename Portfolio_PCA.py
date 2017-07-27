@@ -43,49 +43,30 @@ for i in range(n_portfolios):
     randarr = np.random.rand(n_assets)
     weights = randarr/randarr.sum()  # Five weights summing to 1
     weight_list.append(weights)
-    #calculate annualised portfolio return
+    # calculate annualised portfolio return
     pf_ret = round(np.sum(mu * weights) * n_days,2)
     pf_volatility = round(np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days),2)
     results[0,i] = pf_ret
     results[1,i] = pf_volatility
-    print(pf_volatility)
 
-results_frame = DataFrame(results.T,columns=['ret','stdev'])
-# plt.scatter(results_frame.stdev,results_frame.ret,cmap='RdYlBu')
-# plt.show()
-
-pca = sk_pca(n_components=n_assets)  # Take the first 5 components
+pca = sk_pca(n_components=n_assets)
 # rets = np.log(closing / closing.shift(1)).dropna()
 pc = pca.fit_transform(prices)
-
 # plot the variance explained by pcs
 plt.bar(range(n_assets), pca.explained_variance_ratio_)
 plt.title('variance explained by pc')
 plt.show()
 
-# portfolio selection
+# Select a portfolio out of the 100
 selected_pf = 1
-weights = weight_list[selected_pf]
 
-# get the Principal components
-pcs = pca.components_
-# first component
-pc1 = pcs[0, :]
-print(pc1)
-# normalized to 1
-pc_w = np.asmatrix(pc1/sum(pc1)).T
-print(pc_w)
+# get First `n_components` Principal components
+pcs_1_2 = pca.components_[0:n_components,:].T
+pc_weights = weight_list[selected_pf].dot(pcs_1_2)
 
-pf_ret = mu * weights * n_days
-# apply our first componenet as weight of the stocks
-pc1_ret = pf_ret*pc_w
+# pf_volatility = round(np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days),2)
+# Portfolio volatility with PCs
+pf_volatility = np.sqrt(np.sum([ pc_weights[i]**2 * np.var(prices[:,i]) for i in range(n_components) ]))
 
-# plot the total return index of the first PC portfolio
-pc_ret = DataFrame(data=pc1_ret)
-pc_ret_idx = pc_ret+1
-
-# Pad the explained_variance_ratio_ with zeros, multiply it with the weight vector
-# portfolio_volatility_pca = weights * np.pad(np.sqrt(pca.explained_variance_ratio_), (0,n_assets-n_components), mode='constant')
-#
-# print("PCA pf_volatility: ", sum(portfolio_volatility_pca))
-print("Actual volatility" , results[selected_pf,1])
+print("Actual volatility: " , results[selected_pf,1])
+print("PCA: " , pf_volatility)
