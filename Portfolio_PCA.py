@@ -69,4 +69,4 @@ pc_weights = weight_list[selected_pf].dot(pcs_1_2)
 pf_volatility = np.sqrt(np.sum([ pc_weights[i]**2 * np.var(prices[:,i]) for i in range(n_components) ]))
 
 print("Actual volatility: " , results[selected_pf,1])
-print("PCA: " , pf_volatility)
+print("Volatility calculated by PCA : " , pf_volatility)
