@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA as sk_pca
 
-n_days = 252  # Working days in a year
+n_days = 1000  # Return series length
 
 n_assets = 5
 # Observed that 2 principal components contributed to  >90% variance
@@ -16,7 +16,7 @@ closing = np.random.randint(1300, 1500, n_assets)/100 # Closing price between 13
 dt = 1/n_days
 mu = np.random.randint(n_assets, 15, n_assets)/10000  # Mean between .0005 and .0015 (Daily)
 
-sigma = np.random.randint(5, 18, n_assets)/100  # Random volatility between 10-20% (Annual)
+sigma = np.random.randint(1, 20, n_assets)/100  # Random volatility between 1-20% (Annual)
 # sigma = np.zeros(n_assets)
 # NOTE: Performance wise, it's better to switch the dimensions while
 # asssigning, so as to avoid getting transpose for calculating covariance
@@ -51,8 +51,6 @@ for i in range(n_portfolios):
     results[1,i] = pf_volatility
 
 pca = sk_pca(n_components=n_assets)
-# rets = np.log(closing / closing.shift(1)).dropna()
-pc = pca.fit_transform(prices)
 # plot the variance explained by pcs
 plt.bar(range(n_assets), pca.explained_variance_ratio_)
 plt.title('variance explained by pc')
