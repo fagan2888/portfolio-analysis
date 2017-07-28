@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA as sk_pca
 
-n_days = 1000  # Return series length
+n_days = 252  # Working days in a year
 
 n_assets = 5
 # Observed that 2 principal components contributed to  >90% variance
@@ -51,6 +51,7 @@ for i in range(n_portfolios):
     results[1,i] = pf_volatility
 
 pca = sk_pca(n_components=n_assets)
+pc = pca.fit_transform(prices)
 # plot the variance explained by pcs
 plt.bar(range(n_assets), pca.explained_variance_ratio_)
 plt.title('variance explained by pc')
