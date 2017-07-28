@@ -29,7 +29,7 @@ daily_returns = np.random.standard_normal(size = (n_days , n_assets))
 daily_returns = daily_returns/daily_returns.sum()
 
 # Simulate stocks. This is just to simulate the variance.
-for i in range(1 ,n_days):
+for i in range(1, n_days):
     prices[i, :] = prices[i-1, :] * (np.exp((mu-0.5*sigma**2)*dt +
         np.sqrt(dt)*daily_returns[i])).T
 
@@ -69,5 +69,5 @@ pc_weights = weight_list[selected_pf].dot(pcs_1_2)
 pf_volatility = np.sqrt(np.sum([ pc_weights[i]**2 * np.var(prices[:,i]) for i in range(n_components)
     ])) * np.sqrt(n_days)
 
-print("Actual volatility: " , results[selected_pf,1])
+print("Actual volatility: " , results[1, selected_pf])
 print("Volatility calculated by PCA : " , pf_volatility)
