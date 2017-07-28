@@ -15,8 +15,10 @@ n_portfolios = 100
 closing = np.random.randint(1300, 1500, n_assets)/100 # Closing price between 13 and 15
 dt = 1/n_days
 mu = np.random.randint(n_assets, 15, n_assets)/10000  # Mean between .0005 and .0015 (Daily)
+print(mu)
 
 sigma = np.random.randint(1, 20, n_assets)/100  # Random volatility between 1-20% (Annual)
+print(sigma)
 # sigma = np.zeros(n_assets)
 # NOTE: Performance wise, it's better to switch the dimensions while
 # asssigning, so as to avoid getting transpose for calculating covariance
@@ -53,9 +55,9 @@ for i in range(n_portfolios):
 pca = sk_pca(n_components=n_assets)
 pc = pca.fit_transform(prices)
 # plot the variance explained by pcs
-plt.bar(range(n_assets), pca.explained_variance_ratio_)
-plt.title('variance explained by pc')
-plt.show()
+# plt.bar(range(n_assets), pca.explained_variance_ratio_)
+# plt.title('variance explained by pc')
+# plt.show()
 
 # Select a portfolio out of the 100
 selected_pf = 1
