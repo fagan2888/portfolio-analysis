@@ -12,7 +12,7 @@ n_assets = 5
 # most of the time
 n_components = 2
 n_portfolios = 100
-closing = np.random.randint(1000, 1500, n_assets)/100
+closing = np.random.randint(1300, 1500, n_assets)/100 # Closing price between 13 and 15
 dt = 1/n_days
 mu = np.random.randint(n_assets, 15, n_assets)/10000  # Mean between .0005 and .0015 (Daily)
 
@@ -28,7 +28,7 @@ daily_returns = np.random.standard_normal(size = (n_days , n_assets))
 # Limit the random returns
 daily_returns = daily_returns/daily_returns.sum()
 
-# Simulate stocks. This is just to get the covariance.
+# Simulate stocks. This is just to simulate the variance.
 for i in range(1 ,n_days):
     prices[i, :] = prices[i-1, :] * (np.exp((mu-0.5*sigma**2)*dt +
         np.sqrt(dt)*daily_returns[i])).T
@@ -39,6 +39,7 @@ plt.show()
 
 weight_list = []
 results = np.zeros((2, n_portfolios))
+# Calculate portfolio volatility
 for i in range(n_portfolios):
     randarr = np.random.rand(n_assets)
     weights = randarr/randarr.sum()  # Five weights summing to 1
@@ -66,7 +67,8 @@ pc_weights = weight_list[selected_pf].dot(pcs_1_2)
 
 # pf_volatility = round(np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days),2)
 # Portfolio volatility with PCs
-pf_volatility = np.sqrt(np.sum([ pc_weights[i]**2 * np.var(prices[:,i]) for i in range(n_components) ]))
+pf_volatility = np.sqrt(np.sum([ pc_weights[i]**2 * np.var(prices[:,i]) for i in range(n_components)
+    ])) * np.sqrt(n_days)
 
 print("Actual volatility: " , results[selected_pf,1])
 print("Volatility calculated by PCA : " , pf_volatility)
