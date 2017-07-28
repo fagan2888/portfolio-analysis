@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA as sk_pca
 
-n_days = 252  # Working days in a year
+n_days = 1000  # Return series length
 
 n_assets = 5
 # Observed that 2 principal components contributed to  >90% variance
