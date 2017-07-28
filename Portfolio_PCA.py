@@ -16,7 +16,7 @@ closing = np.random.randint(1300, 1500, n_assets)/100 # Closing price between 13
 dt = 1/n_days
 mu = np.random.randint(n_assets, 15, n_assets)/10000  # Mean between .0005 and .0015 (Daily)
 
-sigma = np.random.randint(17, 19, n_assets)/100  # Random volatility between 10-20% (Annual)
+sigma = np.random.randint(5, 18, n_assets)/100  # Random volatility between 10-20% (Annual)
 # sigma = np.zeros(n_assets)
 # NOTE: Performance wise, it's better to switch the dimensions while
 # asssigning, so as to avoid getting transpose for calculating covariance
@@ -45,8 +45,8 @@ for i in range(n_portfolios):
     weights = randarr/randarr.sum()  # Five weights summing to 1
     weight_list.append(weights)
     # calculate annualised portfolio return
-    pf_ret = round(np.sum(mu * weights) * n_days,2)
-    pf_volatility = round(np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days),2)
+    pf_ret = round(np.sum(mu * weights) * n_days, 2)
+    pf_volatility = np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days)
     results[0,i] = pf_ret
     results[1,i] = pf_volatility
 
