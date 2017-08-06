@@ -20,6 +20,7 @@ dates = bdate_range(start=closing.ix[-1].name, periods=n_days)
 n_assets = len(symbols)
 n_sims = 100
 dt = 1/n_days
+# dt = 1
 mu = rets.mean().values
 sigma = rets.std().values*np.sqrt(n_days)
 
@@ -31,6 +32,7 @@ prices = Panel(items=range(n_sims), minor_axis=symbols, major_axis=dates)
 prices.ix[:, 0, :] = closing.ix[-1].values.repeat(n_sims).reshape(n_assets,n_sims).T # set initial values
 
 for i in range(1,n_days):
+    # prices.ix[:, i, :] = prices.ix[:, i-1, :] * (np.exp(mu*dt + np.sqrt(dt)*corr_values[i::n_days])).T
     prices.ix[:, i, :] = prices.ix[:, i-1, :] * (np.exp((mu-0.5*sigma**2)*dt + np.sqrt(dt)*corr_values[i::n_days])).T
 
 # Plot these one by one
