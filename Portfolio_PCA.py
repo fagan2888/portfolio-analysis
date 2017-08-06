@@ -13,11 +13,12 @@ n_assets = 5
 n_components = 2
 n_portfolios = 100
 closing = np.random.randint(1300, 1500, n_assets)/100 # Closing price between 13 and 15
-dt = 1/n_days
-mu = np.random.randint(n_assets, 15, n_assets)/10000  # Mean between .0005 and .0015 (Daily)
+dt = 1
+# dt = 1/n_days
+mu = np.random.randint(0.1, 0.2, n_assets)/252  # Mean between .0005 and .0015 (Daily)
 print(mu)
 
-sigma = np.random.randint(1, 20, n_assets)/100  # Random volatility between 1-20% (Annual)
+sigma = np.random.randint(10, 20, n_assets)/100/np.sqrt(252)  # Random volatility between 1-20% (Annual)
 print(sigma)
 # sigma = np.zeros(n_assets)
 # NOTE: Performance wise, it's better to switch the dimensions while
@@ -47,8 +48,8 @@ for i in range(n_portfolios):
     weights = randarr/randarr.sum()  # Five weights summing to 1
     weight_list.append(weights)
     # calculate annualised portfolio return
-    pf_ret = round(np.sum(mu * weights) * n_days, 2)
-    pf_volatility = np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days)
+    pf_ret = round(np.sum(mu * weights) * 252, 2)
+    pf_volatility = np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(252)
     results[0,i] = pf_ret
     results[1,i] = pf_volatility
 
@@ -69,7 +70,9 @@ pc_weights = weight_list[selected_pf].dot(pcs_1_2)
 # pf_volatility = round(np.sqrt(np.dot(weights.T,np.dot(cov_matrix, weights))) * np.sqrt(n_days),2)
 # Portfolio volatility with PCs
 pf_volatility = np.sqrt(np.sum([ pc_weights[i]**2 * np.var(prices[:,i]) for i in range(n_components)
-    ])) * np.sqrt(n_days)
+    ])) * np.sqrt(252)
 
 print("Actual volatility: " , results[1, selected_pf])
 print("Volatility calculated by PCA : " , pf_volatility)
+print("Accuracy of volatility prediction ",
+      abs(results[1, selected_pf]-pf_volatility)/results[1, selected_pf])

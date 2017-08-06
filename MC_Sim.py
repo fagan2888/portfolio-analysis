@@ -19,8 +19,9 @@ n_days = 255  # Working days in a year
 dates = bdate_range(start=closing.ix[-1].name, periods=n_days)
 n_assets = len(symbols)
 n_sims = 100
-dt = 1/n_days
 # dt = 1
+dt = 1/n_days
+# mu = rets.mean().values*n_days
 mu = rets.mean().values
 sigma = rets.std().values*np.sqrt(n_days)
 
